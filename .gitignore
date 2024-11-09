@@ -1,0 +1,10 @@
+security_models/
+.venv/
+Proyecto-XSS-Backend.code-workspace
+static/
+**/__pycache__/
+.idea/
+.venv/
+**/*.db
+.mypy_cache/
+.env
