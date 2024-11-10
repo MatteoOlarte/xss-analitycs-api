@@ -21,6 +21,11 @@ __file_not_found_error = HTTPException(
     detail='File not found',
     headers={'X-Error': 'FileNotFound'}
 )
+__not_js_file_error = HTTPException(
+    status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+    detail="The uploaded file is not a JavaScript file. Please upload a valid file with a .js extension.",
+    headers={'X-Error': 'NotJsFile'}
+)
 
 
 class __SecurityModels(str, Enum):
@@ -37,13 +42,16 @@ async def analyze_js(
 
     if not file:
         raise __file_not_found_error
+    
+    if not file.endswith('.js'):
+        raise __not_js_file_error
 
     if (model is __SecurityModels.MODEL_150E):
         prediction = await asyncio.to_thread(xss.run_150epochs, file)
         return prediction
-    
+
     if (model is __SecurityModels.MODEL_1600E):
         prediction = await asyncio.to_thread(xss.run_1600epochs, file)
         return prediction
-    
+
     raise __invalid_model_error
