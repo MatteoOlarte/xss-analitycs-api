@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 # Load environment variables from a .env file
 load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
 
 # SECRET_KEY is used for security purposes, such as signing tokens or cookies.
 # It is loaded from the environment variable T_KEY. This key should be kept secret.
@@ -25,5 +24,5 @@ CONNECTION_STR = os.getenv('C_STR')
 ALLOWED_HOSTS = [
     "http://127.0.0.1:5500",
     "https://matteoolarte.github.io",
-    os.getenv('L_HOST')
+    os.getenv('L_HOST') or ''
 ]
