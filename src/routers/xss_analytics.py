@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from ..utils import file_utils
 from ..utils import xss
 from ..shemas import SecurityPredictionSchema
+from ..shemas import SecurityAnalysis
 
 router = APIRouter(tags=['XSS Analysis'], prefix='/xss_analysis')
 __invalid_model_error = HTTPException(
@@ -55,3 +56,16 @@ async def analyze_js(
         return prediction
 
     raise __invalid_model_error
+
+
+@router.get('/analyze_js/errors', response_model=SecurityAnalysis | None)
+async def get_errors(url: str) -> SecurityAnalysis | None:
+    file = await file_utils.get_file(url)
+
+    if not file:
+        raise __file_not_found_error
+    
+    if not file.endswith('.js'):
+        raise __not_js_file_error
+    
+    return await asyncio.to_thread(xss.vulnerable_lines, file)

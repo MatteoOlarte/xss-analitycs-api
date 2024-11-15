@@ -8,3 +8,4 @@ static/
 **/*.db
 .mypy_cache/
 .env
+*.rar
